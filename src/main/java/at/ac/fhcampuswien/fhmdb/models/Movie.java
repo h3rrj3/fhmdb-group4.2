@@ -36,6 +36,9 @@ public class Movie {
         List<Movie> movies = new ArrayList<>();
 
         // added dummy movies; genres are formatted to a single object by using List.of
+        movies.add(new Movie("How to Lose a Guy in 10 Days", "Benjamin Barry is an advertising executive and ladies' man who, to win a big campaign, bets that he can make a woman fall in love with him in 10 days.", List.of(Genre.ROMANCE, Genre.DRAMA)));
+        movies.add(new Movie("Oppenheimer", "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.", List.of(Genre.DRAMA, Genre.HISTORY)));
+        movies.add(new Movie("The Lion King", "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.", List.of(Genre.ANIMATION, Genre.FAMILY, Genre.ADVENTURE)));
         movies.add(new Movie("Star Trek II: The Wrath of Khan", "With the assistance of the Enterprise crew, Admiral Kirk must stop an old nemesis, Khan Noonien Singh, from using the life-generating Genesis Device as the ultimate weapon.", List.of(Genre.SCIENCE_FICTION, Genre.ADVENTURE, Genre.ACTION)));
         movies.add(new Movie("The Lord of the Rings: The Return of the King", "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.", List.of(Genre.FANTASY, Genre.ADVENTURE)));
         movies.add(new Movie("Les Misérables", "In 19th-century France, Jean Valjean, who for decades has been hunted by the ruthless policeman Javert after breaking parole, agrees to care for a factory worker's daughter. The decision changes their lives forever.", List.of(Genre.MUSICAL, Genre.HISTORY)));
