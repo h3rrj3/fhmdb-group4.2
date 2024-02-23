@@ -35,6 +35,9 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
+    @FXML
+    public JFXButton removeFilterBtn;
+
     private ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
@@ -64,9 +67,14 @@ public class HomeController implements Initializable {
 
         // Filter button:
         searchBtn.setOnAction(actionEvent -> {
+            addAllGenresOption();
             updateMovieListView();
         });
+
+        // Remove Filter button:
+        removeFilterBtn.setOnAction(actionEvent -> resetFilters());
     }
+
     // method to sort movies by ascending/descending title
     private void sortMovies(ObservableList<Movie> movies, boolean ascending) {
         if (ascending) {
@@ -80,29 +88,48 @@ public class HomeController implements Initializable {
 
     // method to update observableMovies according to the user inputs regarding queries and/or genre
     public void updateMovieListView() {
-        String searchQuery = searchField.getText().toLowerCase();  // checks the user input and pulls everything to lower case
-        Movie.Genre selectedGenre = (Movie.Genre) genreComboBox.getValue(); // checks the selected genre
+        String searchQuery = searchField.getText().toLowerCase();
+        Object selectedGenre = genreComboBox.getValue(); // Änderung hier, um Object statt Movie.Genre zu verwenden
+
+        if ("All Genres".equals(selectedGenre)) {
+            selectedGenre = null;
+            genreComboBox.getSelectionModel().clearSelection();
+            genreComboBox.setPromptText("Filter by Genre");
+        }
 
         List<Movie> filteredMovies = new ArrayList<>();
-        for (Movie allMovie : allMovies) {
+        for (Movie movie : allMovies) {
             boolean matchesQuery = searchQuery.isEmpty() ||
-                    allMovie.getTitle().toLowerCase().contains(searchQuery) ||
-                    allMovie.getDescription().toLowerCase().contains(searchQuery);
-            boolean matchesGenre = selectedGenre == null || allMovie.getGenres().contains(selectedGenre);
+                    movie.getTitle().toLowerCase().contains(searchQuery) ||
+                    movie.getDescription().toLowerCase().contains(searchQuery);
+            boolean matchesGenre = selectedGenre == null || movie.getGenres().contains(selectedGenre);
             if (matchesQuery && matchesGenre) {
-                filteredMovies.add(allMovie);
+                filteredMovies.add(movie);
             }
         }
 
-        //observableMovies.setAll(filteredMovies); // sets observableMovies to filtered movies
         observableMovies.clear();
         observableMovies.addAll(filteredMovies);
-        sortMovies(observableMovies, true); // to sort in ascending order
-        if(sortBtn.getText().equals("Sort (desc)")) { // to guarantee Sort (asc) on sortBtn on fresh movieListView
+        sortMovies(observableMovies, true);
+        if (sortBtn.getText().equals("Sort (desc)")) {
             sortBtn.setText("Sort (asc)");
         }
         movieListView.refresh();
     }
 
+    // method to set "All Genres" option
+    private void addAllGenresOption() {
+        if (!genreComboBox.getItems().contains("All Genres")) {
+            genreComboBox.getItems().add(0, "All Genres");
+        }
+    }
 
+    // method to reset all filters
+    private void resetFilters() {
+        searchField.setText("");  // Clear the search field
+        genreComboBox.getSelectionModel().clearSelection();  // Reset the genre combo box
+        genreComboBox.setPromptText("Filter by Genre");
+
+        updateMovieListView();  // Refresh the movie list view
+    }
 }
