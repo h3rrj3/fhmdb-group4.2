@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
-    // Enumeration of possible genres
+    // enumeration of possible genres for List<Genre>
     public enum Genre {
         ACTION, ADVENTURE, ANIMATION, BIOGRAPHY, COMEDY, CRIME, DRAMA, DOCUMENTARY, FAMILY, FANTASY, HISTORY, HORROR, MUSICAL, MYSTERY, ROMANCE, SCIENCE_FICTION, SPORT, THRILLER, WAR, WESTERN
     }
     private String title;
     private String description;
-    private List<Genre> genres;
+    private List<Genre> genres; // added ArrayList to carry the genre information
+
+    // modified Movie constructor to support genres
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
         this.description = description;
@@ -25,12 +27,15 @@ public class Movie {
         return description;
     }
 
+    // added getter for genres
     public List<Genre> getGenres() {
         return genres;
     }
 
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
+
+        // added List of dummy movies; genres are formatted to a single object by using List.of
         movies.add(new Movie("Star Trek II: The Wrath of Khan", "With the assistance of the Enterprise crew, Admiral Kirk must stop an old nemesis, Khan Noonien Singh, from using the life-generating Genesis Device as the ultimate weapon.", List.of(Genre.SCIENCE_FICTION, Genre.ADVENTURE, Genre.ACTION)));
         movies.add(new Movie("The Lord of the Rings: The Return of the King", "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.", List.of(Genre.FANTASY, Genre.ADVENTURE)));
         movies.add(new Movie("Les Misérables", "In 19th-century France, Jean Valjean, who for decades has been hunted by the ruthless policeman Javert after breaking parole, agrees to care for a factory worker's daughter. The decision changes their lives forever.", List.of(Genre.MUSICAL, Genre.HISTORY)));
@@ -43,6 +48,7 @@ public class Movie {
         movies.add(new Movie("Puss in Boots", "An outlaw cat, his childhood egg-friend, and a seductive thief kitty set out in search for the eggs of the fabled Golden Goose to clear his name, restore his lost honor, and regain the trust of his mother and town.", List.of(Genre.COMEDY, Genre.FAMILY, Genre.ANIMATION)));
         movies.add(new Movie("Avatar", "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.", List.of(Genre.ANIMATION, Genre.DRAMA, Genre.ACTION)));
         movies.add(new Movie("The Wolf of Wall Street", "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption and the federal government.", List.of(Genre.DRAMA, Genre.ROMANCE, Genre.BIOGRAPHY)));
+
         return movies;
     }
 }

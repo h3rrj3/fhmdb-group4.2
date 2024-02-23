@@ -13,8 +13,8 @@ import javafx.scene.paint.Color;
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
-    private final Label genre = new Label();
-    private final VBox layout = new VBox(title, detail, genre);
+    private final Label genre = new Label();    // added label genre
+    private final VBox layout = new VBox(title, detail, genre); // added the label genre as parameter to be included for every movie's VBox
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
@@ -30,16 +30,17 @@ public class MovieCell extends ListCell<Movie> {
                             ? movie.getDescription()
                             : "No description available"
             );
+            // added the label genre to display the respective genres
             genre.setText(
                     movie.getGenres() != null
-                            ? movie.getGenres().toString().replace("[", "").replace("]", "")
+                            ? movie.getGenres().toString().replace("[", "").replace("]", "")    // removes the square brackets of the ArrayList Genres
                             : "No genres available"
             );
 
             // color scheme
             title.getStyleClass().add("text-yellow");
             detail.getStyleClass().add("text-white");
-            genre.getStyleClass().add("text-whiteItalic");
+            genre.getStyleClass().add("text-whiteItalic");  // make the genre text appear white and italic as required
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
             // layout
