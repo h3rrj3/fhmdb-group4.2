@@ -10,9 +10,9 @@ public class Movie {
     }
     private String title;
     private String description;
-    private List<Genre> genres; // added ArrayList to carry the genre information
+    private List<Genre> genres; // added a List to carry the genre information
 
-    // modified Movie constructor to support genres
+    // modified Movie constructor to support genres by adding List<Genre> as parameter and genres as another property
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
         this.description = description;
@@ -35,7 +35,7 @@ public class Movie {
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
 
-        // added List of dummy movies; genres are formatted to a single object by using List.of
+        // added dummy movies; genres are formatted to a single object by using List.of
         movies.add(new Movie("Star Trek II: The Wrath of Khan", "With the assistance of the Enterprise crew, Admiral Kirk must stop an old nemesis, Khan Noonien Singh, from using the life-generating Genesis Device as the ultimate weapon.", List.of(Genre.SCIENCE_FICTION, Genre.ADVENTURE, Genre.ACTION)));
         movies.add(new Movie("The Lord of the Rings: The Return of the King", "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.", List.of(Genre.FANTASY, Genre.ADVENTURE)));
         movies.add(new Movie("Les Misérables", "In 19th-century France, Jean Valjean, who for decades has been hunted by the ruthless policeman Javert after breaking parole, agrees to care for a factory worker's daughter. The decision changes their lives forever.", List.of(Genre.MUSICAL, Genre.HISTORY)));
