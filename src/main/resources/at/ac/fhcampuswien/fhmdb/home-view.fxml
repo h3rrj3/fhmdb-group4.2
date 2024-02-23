@@ -24,7 +24,7 @@
                <Insets left="2.0" right="2.0" />
             </padding>
          </Label>
-         <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+         <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb by Group 4.2!" />
       </children>
    </HBox>
    <HBox spacing="5.0" styleClass="background-black" stylesheets="@styles.css">
