@@ -126,10 +126,13 @@ public class HomeController implements Initializable {
 
     // method to reset all filters
     private void resetFilters() {
-        searchField.setText("");  // Clear the search field
+        searchField.clear();  // Clear the search field
         genreComboBox.getSelectionModel().clearSelection();  // Reset the genre combo box
         genreComboBox.setPromptText("Filter by Genre");
 
         updateMovieListView();  // Refresh the movie list view
+    }
+    public void setResetFilters() {
+        resetFilters();
     }
 }
