@@ -89,7 +89,7 @@ public class HomeController implements Initializable {
     // method to update observableMovies according to the user inputs regarding queries and/or genre
     public void updateMovieListView() {
         String searchQuery = searchField.getText().toLowerCase();
-        Object selectedGenre = genreComboBox.getValue(); // Änderung hier, um Object statt Movie.Genre zu verwenden
+        Object selectedGenre = genreComboBox.getValue();
 
         if ("All Genres".equals(selectedGenre)) {
             selectedGenre = null;
@@ -114,7 +114,9 @@ public class HomeController implements Initializable {
         if (sortBtn.getText().equals("Sort (desc)")) {
             sortBtn.setText("Sort (asc)");
         }
-        movieListView.refresh();
+        //movieListView.refresh();
+        movieListView.setItems(observableMovies);   // set data of observable list to list view
+        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
     }
 
     // method to set "All Genres" option
@@ -125,14 +127,10 @@ public class HomeController implements Initializable {
     }
 
     // method to reset all filters
-    private void resetFilters() {
+    public void resetFilters() {
         searchField.clear();  // Clear the search field
         genreComboBox.getSelectionModel().clearSelection();  // Reset the genre combo box
         genreComboBox.setPromptText("Filter by Genre");
-
         updateMovieListView();  // Refresh the movie list view
-    }
-    public void setResetFilters() {
-        resetFilters();
     }
 }
