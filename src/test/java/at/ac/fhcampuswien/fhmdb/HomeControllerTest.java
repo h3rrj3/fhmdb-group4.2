@@ -21,7 +21,6 @@ class HomeControllerTest {
 
         } catch (NullPointerException ignore) {}
 
-
         // then
         assertNull(newHomecontroller.searchField);
         //assertEquals(newHomecontroller.searchField.getText(), expected);
@@ -32,7 +31,6 @@ class HomeControllerTest {
     void resetFilters_clears_genre() {
         // given
         HomeController newHomecontroller = new HomeController();
-        String expected = "Filter by Genre";
         try {
             newHomecontroller.genreComboBox.setValue("DRAMA");
 
