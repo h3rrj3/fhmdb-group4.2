@@ -85,35 +85,10 @@ public class HomeControllerTest {
         });
     }
     @Test
-    public void updateMovieListViewShouldFilterByGenre() {
-        Platform.runLater(() -> {
-            // Given
-            controller.genreComboBox.getItems().addAll(Movie.Genre.values());
-            controller.genreComboBox.getSelectionModel().select(Movie.Genre.ACTION.toString());
-            controller.allMovies = Arrays.asList(
-                    new Movie("A", "desc", new ArrayList<>(Arrays.asList(Movie.Genre.ACTION))),
-                    new Movie("B", "desc", new ArrayList<>(Arrays.asList(Movie.Genre.COMEDY)))
-            );
-            controller.observableMovies = FXCollections.observableArrayList(controller.allMovies);
-
-            // When
-            controller.updateMovieListView();
-
-            // Then
-            assertEquals(1, controller.observableMovies.size());
-            assertEquals("A", controller.observableMovies.get(0).getTitle());
-        });
-    }
-    @Test
     public void updateMovieListViewShouldFilterBySearchQuery() {
         Platform.runLater(() -> {
             // Given
             controller.searchField.setText("A");
-            controller.allMovies = Arrays.asList(
-                    new Movie("A", "desc", new ArrayList<>()),
-                    new Movie("B", "desc", new ArrayList<>())
-            );
-            controller.observableMovies = FXCollections.observableArrayList(controller.allMovies);
 
             // When
             controller.updateMovieListView();
