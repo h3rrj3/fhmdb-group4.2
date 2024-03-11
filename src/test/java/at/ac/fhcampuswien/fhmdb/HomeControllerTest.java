@@ -126,4 +126,5 @@ public class HomeControllerTest {
             assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
         });
     }
+
 }
