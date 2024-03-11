@@ -38,7 +38,7 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton removeFilterBtn;
 
-    private ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    public ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,7 +76,7 @@ public class HomeController implements Initializable {
     }
 
     // method to sort movies by ascending/descending title
-    private void sortMovies(ObservableList<Movie> movies, boolean ascending) {
+    public void sortMovies(ObservableList<Movie> movies, boolean ascending) {
         if (ascending) {
             // sort in ascending order
             FXCollections.sort(movies, Comparator.comparing(Movie::getTitle));
@@ -120,7 +120,7 @@ public class HomeController implements Initializable {
     }
 
     // method to set "All Genres" option
-    private void addAllGenresOption() {
+    public void addAllGenresOption() {
         if (!genreComboBox.getItems().contains("All Genres")) {
             genreComboBox.getItems().add(0, "All Genres");
         }
