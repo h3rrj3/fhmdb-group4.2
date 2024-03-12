@@ -27,7 +27,7 @@ public class HomeControllerTest {
     private HomeController controller;
 
     @Start
-    public void start(Stage stage) {
+     void start(Stage stage) {
         Platform.runLater(() -> {
             controller = new HomeController();
             controller.searchField = new TextField();
@@ -40,7 +40,7 @@ public class HomeControllerTest {
     }
 
     @BeforeEach
-    public void setUp() {
+     void setUp() {
         Platform.runLater(() -> {
             controller.allMovies = Arrays.asList(
                     new Movie("A", "desc", new ArrayList<>()),
@@ -51,7 +51,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void sortMoviesShouldSortInAscendingOrder() {
+     void sortMoviesShouldSortInAscendingOrder() {
         Platform.runLater(() -> {
             // Given
             controller.observableMovies = FXCollections.observableArrayList(
@@ -68,7 +68,7 @@ public class HomeControllerTest {
         });
     }
     @Test
-    public void sortMoviesShouldSortInDescendingOrder() {
+     void sortMoviesShouldSortInDescendingOrder() {
         Platform.runLater(() -> {
             // Given
             controller.observableMovies = FXCollections.observableArrayList(
@@ -85,7 +85,7 @@ public class HomeControllerTest {
         });
     }
     @Test
-    public void updateMovieListViewShouldFilterBySearchQuery() {
+     void updateMovieListViewShouldFilterBySearchQuery() {
         Platform.runLater(() -> {
             // Given
             controller.searchField.setText("A");
@@ -100,7 +100,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void addAllGenresOptionShouldAddAllGenresOption() {
+     void addAllGenresOptionShouldAddAllGenresOption() {
         Platform.runLater(() -> {
             // When
             controller.addAllGenresOption();
@@ -111,7 +111,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void resetFiltersShouldClearSearchFieldAndGenreComboBox() {
+     void resetFiltersShouldClearSearchFieldAndGenreComboBox() {
         Platform.runLater(() -> {
             // Given
             controller.searchField.setText("A");
@@ -126,5 +126,17 @@ public class HomeControllerTest {
             assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
         });
     }
+    @Test
+    void addAllGenresOptionShouldNotAddDuplicateAllGenresOption() {
+        Platform.runLater(() -> {
+            // Given
+            controller.genreComboBox.getItems().add("All Genres");
 
+            // When
+            controller.addAllGenresOption();
+
+            // Then
+            assertEquals(1, controller.genreComboBox.getItems().stream().filter(item -> item.equals("All Genres")).count());
+        });
+    }
 }
