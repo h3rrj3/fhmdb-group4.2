@@ -17,6 +17,7 @@ import org.testfx.framework.junit5.Start;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -51,25 +52,36 @@ public class HomeControllerTest {
     }
 
     @Test
-     void sortMoviesShouldSortInAscendingOrder() {
+    void sortMoviesShouldSortInAscendingOrder() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
         Platform.runLater(() -> {
-            // Given
-            controller.observableMovies = FXCollections.observableArrayList(
-                    new Movie("B", "desc", new ArrayList<>()),
-                    new Movie("A", "desc", new ArrayList<>())
-            );
+            try {
+                // Given
+                controller.observableMovies = FXCollections.observableArrayList(
+                        new Movie("A", "desc", new ArrayList<>()),
+                        new Movie("B", "desc", new ArrayList<>())
+                );
 
-            // When
-            controller.sortMovies(controller.observableMovies, true);
+                // When
+                controller.sortMovies(controller.observableMovies, true);
 
-            // Then
-            assertEquals("A", controller.observableMovies.get(0).getTitle());
-            assertEquals("B", controller.observableMovies.get(1).getTitle());
+                // Then
+                assertEquals("A", controller.observableMovies.get(0).getTitle());
+                assertEquals("B", controller.observableMovies.get(1).getTitle());
+            } finally {
+                latch.countDown(); // Decrease latch count to continue test execution
+            }
         });
+
+        latch.await(); // Wait for the latch to reach 0
     }
     @Test
-     void sortMoviesShouldSortInDescendingOrder() {
+     void sortMoviesShouldSortInDescendingOrder() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
         Platform.runLater(() -> {
+            try {
             // Given
             controller.observableMovies = FXCollections.observableArrayList(
                     new Movie("A", "desc", new ArrayList<>()),
@@ -82,7 +94,12 @@ public class HomeControllerTest {
             // Then
             assertEquals("B", controller.observableMovies.get(0).getTitle());
             assertEquals("A", controller.observableMovies.get(1).getTitle());
+            } finally {
+                latch.countDown(); // Decrease latch count to continue test execution
+            }
         });
+
+        latch.await(); // Wait for the latch to reach 0
     }
     @Test
      void updateMovieListViewShouldFilterBySearchQuery() {
