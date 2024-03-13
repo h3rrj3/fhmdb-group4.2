@@ -102,58 +102,94 @@ public class HomeControllerTest {
         latch.await(); // Wait for the latch to reach 0
     }
     @Test
-     void updateMovieListViewShouldFilterBySearchQuery() {
+    void updateMovieListViewShouldFilterBySearchQuery() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
         Platform.runLater(() -> {
-            // Given
-            controller.searchField.setText("A");
+            try {
+                // Given
+                controller.searchField.setText("A");
 
-            // When
-            controller.updateMovieListView();
+                // When
+                controller.updateMovieListView();
 
-            // Then
-            assertEquals(1, controller.observableMovies.size());
-            assertEquals("A", controller.observableMovies.get(0).getTitle());
+                // Then
+                assertEquals(1, controller.observableMovies.size());
+                assertEquals("A", controller.observableMovies.get(0).getTitle());
+            } finally {
+                latch.countDown(); // Ensure latch count is decreased to continue execution
+            }
         });
+
+        latch.await(); // Wait for the latch to reach 0 ensuring UI updates are completed
+    }
+
+
+    @Test
+    void addAllGenresOptionShouldAddAllGenresOption() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            try {
+                // When
+                controller.addAllGenresOption();
+
+                // Then
+                assertTrue(controller.genreComboBox.getItems().contains("All Genres"));
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
+
+    @Test
+    void resetFiltersShouldClearSearchFieldAndGenreComboBox() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            try {
+                // Given
+                controller.searchField.setText("A");
+                controller.genreComboBox.getItems().add("All Genres");
+                controller.genreComboBox.getSelectionModel().select("All Genres");
+
+                // When
+                controller.resetFilters();
+
+                // Then
+                assertEquals("", controller.searchField.getText());
+                assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        latch.await();
     }
 
     @Test
-     void addAllGenresOptionShouldAddAllGenresOption() {
-        Platform.runLater(() -> {
-            // When
-            controller.addAllGenresOption();
+    void addAllGenresOptionShouldNotAddDuplicateAllGenresOption() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
 
-            // Then
-            assertTrue(controller.genreComboBox.getItems().contains("All Genres"));
+        Platform.runLater(() -> {
+            try {
+                // Given
+                controller.genreComboBox.getItems().add("All Genres");
+
+                // When
+                controller.addAllGenresOption();
+
+                // Then
+                assertEquals(1, controller.genreComboBox.getItems().stream().filter(item -> item.equals("All Genres")).count());
+            } finally {
+                latch.countDown();
+            }
         });
+
+        latch.await();
     }
 
-    @Test
-     void resetFiltersShouldClearSearchFieldAndGenreComboBox() {
-        Platform.runLater(() -> {
-            // Given
-            controller.searchField.setText("A");
-            controller.genreComboBox.getItems().add("All Genres");
-            controller.genreComboBox.getSelectionModel().select("All Genres");
-
-            // When
-            controller.resetFilters();
-
-            // Then
-            assertEquals("", controller.searchField.getText());
-            assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
-        });
-    }
-    @Test
-    void addAllGenresOptionShouldNotAddDuplicateAllGenresOption() {
-        Platform.runLater(() -> {
-            // Given
-            controller.genreComboBox.getItems().add("All Genres");
-
-            // When
-            controller.addAllGenresOption();
-
-            // Then
-            assertEquals(1, controller.genreComboBox.getItems().stream().filter(item -> item.equals("All Genres")).count());
-        });
-    }
 }
