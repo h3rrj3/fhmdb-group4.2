@@ -63,6 +63,7 @@ public class HomeController implements Initializable {
                 sortMovies(observableMovies, true); // to sort in ascending order
                 sortBtn.setText("Sort (asc)");
             }
+
         });
 
         // Filter button:
@@ -133,4 +134,5 @@ public class HomeController implements Initializable {
         genreComboBox.setPromptText("Filter by Genre");
         updateMovieListView();  // Refresh the movie list view
     }
+
 }
