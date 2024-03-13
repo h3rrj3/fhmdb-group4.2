@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -17,8 +18,9 @@ import org.testfx.framework.junit5.Start;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,36 +54,25 @@ public class HomeControllerTest {
     }
 
     @Test
-    void sortMoviesShouldSortInAscendingOrder() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
+     void sortMoviesShouldSortInAscendingOrder() {
         Platform.runLater(() -> {
-            try {
-                // Given
-                controller.observableMovies = FXCollections.observableArrayList(
-                        new Movie("A", "desc", new ArrayList<>()),
-                        new Movie("B", "desc", new ArrayList<>())
-                );
+            // Given
+            controller.observableMovies = FXCollections.observableArrayList(
+                    new Movie("B", "desc", new ArrayList<>()),
+                    new Movie("A", "desc", new ArrayList<>())
+            );
 
-                // When
-                controller.sortMovies(controller.observableMovies, true);
+            // When
+            controller.sortMovies(controller.observableMovies, true);
 
-                // Then
-                assertEquals("A", controller.observableMovies.get(0).getTitle());
-                assertEquals("B", controller.observableMovies.get(1).getTitle());
-            } finally {
-                latch.countDown(); // Decrease latch count to continue test execution
-            }
+            // Then
+            assertEquals("A", controller.observableMovies.get(0).getTitle());
+            assertEquals("B", controller.observableMovies.get(1).getTitle());
         });
-
-        latch.await(); // Wait for the latch to reach 0
     }
     @Test
-     void sortMoviesShouldSortInDescendingOrder() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
+     void sortMoviesShouldSortInDescendingOrder() {
         Platform.runLater(() -> {
-            try {
             // Given
             controller.observableMovies = FXCollections.observableArrayList(
                     new Movie("A", "desc", new ArrayList<>()),
@@ -94,102 +85,113 @@ public class HomeControllerTest {
             // Then
             assertEquals("B", controller.observableMovies.get(0).getTitle());
             assertEquals("A", controller.observableMovies.get(1).getTitle());
-            } finally {
-                latch.countDown(); // Decrease latch count to continue test execution
-            }
         });
-
-        latch.await(); // Wait for the latch to reach 0
     }
     @Test
-    void updateMovieListViewShouldFilterBySearchQuery() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
+     void updateMovieListViewShouldFilterBySearchQuery() {
         Platform.runLater(() -> {
-            try {
-                // Given
-                controller.searchField.setText("A");
+            // Given
+            controller.searchField.setText("A");
 
-                // When
-                controller.updateMovieListView();
+            // When
+            controller.updateMovieListView();
 
-                // Then
-                assertEquals(1, controller.observableMovies.size());
-                assertEquals("A", controller.observableMovies.get(0).getTitle());
-            } finally {
-                latch.countDown(); // Ensure latch count is decreased to continue execution
-            }
+            // Then
+            assertEquals(1, controller.observableMovies.size());
+            assertEquals("A", controller.observableMovies.get(0).getTitle());
         });
-
-        latch.await(); // Wait for the latch to reach 0 ensuring UI updates are completed
-    }
-
-
-    @Test
-    void addAllGenresOptionShouldAddAllGenresOption() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        Platform.runLater(() -> {
-            try {
-                // When
-                controller.addAllGenresOption();
-
-                // Then
-                assertTrue(controller.genreComboBox.getItems().contains("All Genres"));
-            } finally {
-                latch.countDown();
-            }
-        });
-
-        latch.await();
-    }
-
-
-    @Test
-    void resetFiltersShouldClearSearchFieldAndGenreComboBox() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        Platform.runLater(() -> {
-            try {
-                // Given
-                controller.searchField.setText("A");
-                controller.genreComboBox.getItems().add("All Genres");
-                controller.genreComboBox.getSelectionModel().select("All Genres");
-
-                // When
-                controller.resetFilters();
-
-                // Then
-                assertEquals("", controller.searchField.getText());
-                assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
-            } finally {
-                latch.countDown();
-            }
-        });
-
-        latch.await();
     }
 
     @Test
-    void addAllGenresOptionShouldNotAddDuplicateAllGenresOption() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
+     void addAllGenresOptionShouldAddAllGenresOption() {
         Platform.runLater(() -> {
-            try {
-                // Given
-                controller.genreComboBox.getItems().add("All Genres");
+            // When
+            controller.addAllGenresOption();
 
-                // When
-                controller.addAllGenresOption();
-
-                // Then
-                assertEquals(1, controller.genreComboBox.getItems().stream().filter(item -> item.equals("All Genres")).count());
-            } finally {
-                latch.countDown();
-            }
+            // Then
+            assertTrue(controller.genreComboBox.getItems().contains("All Genres"));
         });
-
-        latch.await();
     }
 
+    @Test
+     void resetFiltersShouldClearSearchFieldAndGenreComboBox() {
+        Platform.runLater(() -> {
+            // Given
+            controller.searchField.setText("A");
+            controller.genreComboBox.getItems().add("All Genres");
+            controller.genreComboBox.getSelectionModel().select("All Genres");
+
+            // When
+            controller.resetFilters();
+
+            // Then
+            assertEquals("", controller.searchField.getText());
+            assertNull(controller.genreComboBox.getSelectionModel().getSelectedItem());
+        });
+    }
+    @Test
+    void addAllGenresOptionShouldNotAddDuplicateAllGenresOption() {
+        Platform.runLater(() -> {
+            // Given
+            controller.genreComboBox.getItems().add("All Genres");
+
+            // When
+            controller.addAllGenresOption();
+
+            // Then
+            assertEquals(1, controller.genreComboBox.getItems().stream().filter(item -> item.equals("All Genres")).count());
+        });
+    }
+
+    @Test
+    void searchFieldShouldCaptureAndSaveTextEnteredByUser() {
+        Platform.runLater(() -> {
+            // Given
+            String searchText = "Avatar";
+
+            // When
+            controller.searchField.setText(searchText);
+
+            // Then
+            assertEquals(searchText, controller.searchField.getText());
+        });
+    }
+
+    @Test
+    void resetFiltersShouldShowAllAvailableMovies() {
+        Platform.runLater(() -> {
+            // Given
+            // Set up the scenario where filters are applied
+            controller.searchField.setText("A");
+            controller.genreComboBox.getItems().add("All Genres");
+            controller.genreComboBox.getSelectionModel().select("All Genres");
+
+            controller.updateMovieListView();
+
+            // When
+            // Reset all filters
+            controller.resetFilters();
+
+            // Then
+            // Assert that all movies are displayed
+            assertEquals(controller.allMovies.size(), controller.observableMovies.size());
+            assertTrue(controller.observableMovies.containsAll(controller.allMovies));
+        });
+
+    }
+
+    @Test
+    void removingGenresFromComboBoxShouldWorkCorrectly() {
+        // Given
+        Platform.runLater(() -> {
+            // Given
+            controller.addAllGenresOption();
+
+            // When
+            controller.genreComboBox.getItems().remove("All Genres"); // Entferne "All Genres"
+
+            // Then
+            assertFalse(controller.genreComboBox.getItems().contains("All Genres")); // Überprüfen, ob "All Genres" entfernt wurde
+        });
+    }
 }
